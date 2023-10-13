@@ -12,6 +12,11 @@ public class PlayerController : MonoBehaviour
     private int numPickups = 5;
     public TextMeshProUGUI scoreText;
     public TextMeshProUGUI winText;
+    public TextMeshProUGUI posText;
+    public TextMeshProUGUI velocityText;
+    private float xcount;
+    private float ycount;
+    private float zcount;
 
     void OnMove(InputValue value)
     {
@@ -20,13 +25,23 @@ public class PlayerController : MonoBehaviour
 
     void Start() {
         count = 0;
+        xcount = 0;
+        ycount = 0;
+        zcount = 0;
         winText.text = "";
         SetCountText();
+        SetPosText();
+        SetVelocityText();
     }
 
     void FixedUpdate() { 
         Vector3 movement = new Vector3(moveValue.x, 0.0f, moveValue.y);
-        GetComponent<Rigidbody>().AddForce(movement * speed * Time.fixedDeltaTime); 
+        GetComponent<Rigidbody>().AddForce(movement * speed * Time.fixedDeltaTime);
+        xcount = transform.position.x;
+        ycount = transform.position.y;
+        zcount = transform.position.z;
+        SetPosText();
+        SetVelocityText();
         } 
 
     void OnTriggerEnter(Collider other) {
@@ -44,5 +59,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    
+    private void SetPosText(){
+        posText.text = "x: " + (xcount).ToString("0.00") + ", y: " + (ycount).ToString("0.00") + ", z: " + (zcount).ToString("0.00");
+    }
+
+    private void SetVelocityText(){
+        velocityText.text = "Velocity: " + GetComponent<Rigidbody>().velocity.ToString("0.00");
+    }
 }
